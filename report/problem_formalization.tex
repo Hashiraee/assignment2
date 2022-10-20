@@ -1,0 +1,83 @@
+\section{Problem Formalization}
+In this section, we introduce our problem, give a mathematical formalization of
+the problem, introduce our models, and present and discuss our assumptions.
+Furthermore, we define our machine learning pipeline.
+
+\subsection{Problem Definition}
+To determine the effectiveness of using past purchase frequency and past coupon
+usage, we use two models which will be used to construct the predictions for
+future purchases. We will then also compare the predictive performance of the
+two models and choosing one to make our final purchase predictions for week 90.
+The before mentioned will help us answer our main research question:
+\textit{Can past coupon usage and past purchase frequency predict future purchase decisions?}
+
+\subsection{Mathematical Formalization of the Learning Problem}
+In this (sub)section, we define the learning problem in a mathematical way.
+First, we define the target variable (the variable of interest). Note that the
+index i (i = 0, 1, \dots, 1999) corresponds to a certain customer, the index j (j = 0,
+1, \dots, 249) corresponds to a certain product and the index k (k = 0, 1,
+\dots, n = 1378720) corresponds to an observation of our customers
+dataset.
+
+\textit{Let $y_{ij,k}$ be the probability of customer i purchasing product j
+for the k'th observation.}
+
+Next, we define our two selected features to predict future customer purchases,
+being past purchase frequency (past purchases) and past coupon usage.
+
+\textit{Let $past\_purchases_{ij,k}$ be the past purchase frequency of 
+customer i purchasing product j for the k'th observation.} \\
+\textit{Let $coupon\_use_{ij,k}$ be the (past) coupon usage of 
+customer i purchasing product j for the k'th observation.}
+
+So our $y_{ij,k}$ is a function of our two selected features being past purchase
+frequency and (past) coupon usage:
+\begin{equation}
+    y_{ij,k} = f(past\_purchases_{ij,k}, coupon\_use_{ij,k}; \theta).
+\end{equation} Where $\theta$ is a parameter vector corresponding to our 2
+selected features (variables).
+
+\subsection{Problem Approach}
+In this (sub)section we briefly introduce our approach to solve our research
+question defined in Subsection 2.1. We will tackle our problem by using two
+models: a Linear Regression model and a Random Forest model. Both of these
+models are Supervised Learning models, because our dataset(s) consist of data
+which already has labels (there are 250 product categories, and we need to
+classify our test data and validation data into one of those 250 categories).
+Therefore, using Supervised Learning methods appears to be the most
+straightforward choice.
+
+\subsection{Assumptions}
+Here we state and discuss the assumptions needed/required for using our selected
+(supervised learning) models.
+
+\subsubsection{Selected Features: Assumptions}
+For our two selected features introduced in Subsection 2.2, we assume that there
+is no missing data and that there are no significant outliers. We will
+discuss/verify these assumptions in the next section (Section 3).
+
+\subsubsection{Linear Regression Model: Assumptions}
+To justify the use of linear regression, we need to state the seven underlying
+assumptions of Ordinary Least Squares \textbf{(OLS)}. \\
+\textbf{Assumption 1}, independent (uncorrelated) explanatory variables. \\
+\textbf{Assumption 2}, the expected values of error terms ($\epsilon_{ij,k}$) are zero. \\
+\textbf{Assumption 3}, the error terms ($\epsilon_{ij,k}$) have equal variance
+(homoscedasticity). \\
+\textbf{Assumption 4}, independence of the error terms. \\
+\textbf{Assumption 5}, fixed and random values for the error terms. \\
+\textbf{Assumption 6}, using a linear model. \\
+\textbf{Assumption 7}, the error terms are normal independent identically
+distributed.
+
+\subsubsection{Random Forest Model: Assumptions}
+To justify the use of the Random Forest model/algorithm, we need to verify the
+following assumptions. \\
+\textbf{Assumption 1}, at each step of building the individual (sub)tree
+we can find the best split of data. \\
+\textbf{Assumption 2}, while building a (sub)tree we do not use the whole
+dataset, but a bootstrap sample. \\
+\textbf{Assumption 3}, need to aggregate the individual tree outputs by
+averaging. \\
+However, there is no formal distributional assumption, since random forest is a
+non-parametric model and can handle skewed and categorical data (like in our
+case).

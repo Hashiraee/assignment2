@@ -1,0 +1,166 @@
+\section{Data and Descriptive Analysis}
+To perform the analysis to answer our research question raised in Section 2.1,
+we examine the dataset of the customers and coupons usage obtained from
+professor Sebastian Gabel during the Learning From Big Data \textbf{(LFBD)} (2022-2023) course.
+This section gives an insight to the datasets (included variables, descriptive
+statistics and key factors). These datasets enable us to extract (or calculate) the features
+(past purchase frequency and past coupon usage) we need to determine whether
+future purchase decisions can be predicted.
+
+\subsection{Features and Target Variable Construction}
+First, we define the target variable (the variable of interest). Note that the
+index i (i = 0, 1, \dots, 1999) corresponds to a certain customer, the index j (j = 0,
+1, \dots, 249) corresponds to a certain product and the index k (k = 0, 1,
+\dots, n) where n = 1378720 corresponds to an observation of our customers
+dataset.
+
+\textit{Let $y_{ij,k}$ be the probability that customer i purchases product j
+for the k'th observation}.
+
+Our target variable, the probability that customer i purchases 
+product j for the k'th observation, (referred to as $y_{ij,k}$ from here on) 
+is distributed between 0 and 1 since it is a probability. 
+This is relevant because we are trying to predict the probability that a customer i 
+will purchase a certain product j in the future.
+
+Second, we define our first feature, the past purchase frequency.
+
+\textit{Let $past\_purchases_{ij,k}$ be the past purchases (frequency) of a
+product j for customer i for the k'th observation}.
+
+The past purchases variable/feature is constructed by summing up the total
+number of times a certain customer i purchases a certain product j and dividing
+it by the total number of weeks. \textbf{Furthermore,} note that index k is not
+relevant for this variable, since the only things necessary for this feature is
+whether a customer i purchased a product j, how often a customer purchased that
+product, and what the total number of weeks is (90 weeks for our whole dataset).
+
+Third, we define our second feature, the (past) coupon usage.
+
+\textit{Let $coupon\_use_{ij,k}$ be the (past) coupon use of a
+product j for customer i for the k'th observation}.
+
+This feature is constructed by using the coupons dataset and appending the
+columns of the coupons dataset to the customers dataset for the corresponding
+customers, since the coupons dataset have a column indicating to which customer
+they were assigned/given.
+
+\subsection{Data Description}
+A total of 1378720 observations are included in the dataset provided by the LFBD
+course. In Table 1, we describe the customer/baskets dataset and its
+variables. In Table 2, we describe the coupons dataset and its variables. Note
+that the \textbf{price} and \textbf{discount} variables are given in euro cents.
+
+\begin{table}[H]
+\parbox{.45\linewidth}{
+\centering
+\scalebox{0.85}
+{
+ \begin{tabular}{| c | c |}
+    \hline
+    Variable & Description \\
+    \hline
+    $Week$ & The week of purchases \\
+    $Customer$ & One of the 2000 customers \\
+    $Product$ & One of the 250 products purchased \\
+    $Price$ & The amount spent on a product \\
+    \hline
+    \end{tabular}
+}
+\caption{Description of the Variables in the Customers/Baskets Dataset}
+}
+\hfill
+\parbox{.45\linewidth}{
+\centering
+\scalebox{0.85}
+{
+    \begin{tabular}{| c | c |}
+    \hline
+    Variable & Description \\
+    \hline
+    $Week$ & The week of coupon use \\
+    $Customer$ & The customer who used the coupon \\
+    $Product$ & The product which is on the coupon \\
+    $Discount$ & The discount a customer receives \\
+    \hline
+    \end{tabular}
+}
+\caption{Description of the Variables in the Coupons Dataset}
+}
+\end{table}
+
+\subsection{Data Characteristics}
+Next, we provide some data characteristics to provide an insight into the
+variables presented in Section 3.2.
+
+To understand customers' future purchase decisions, we use the past purchases
+(frequency) and the past coupon usage to determine the future value of
+$y_{ij,k}$. The past purchases and past coupon usage, which we will use as key factors
+into understanding customers' future purchase decisions, provide a significant
+amount of information on customer purchases. Furthermore, the past coupon usage
+captures the impact of (personalized) advertisement which provides retailers an
+insight into the effectiveness of personalized advertising using
+coupons.
+
+Next, we provide some data characteristics to provide an insight into some of the
+variables discussed in Table 1 and Table 2. We examine the mean, standard
+deviation (stdev), minimum and maximum. 
+\textbf{Note}, we denote an "x" (a cross) for the cells that do not
+make sense (for example, the mean or variance of a customer).
+
+\begin{table}[H]
+\parbox{.45\linewidth}{
+\centering
+\scalebox{0.85}
+{
+    \begin{tabular}{| c | c | c | c | c |}
+    \hline
+    & Week & Customer & Product & Price \\
+    \hline
+    $Mean$ & x & x & x & 584 \\
+    \hline
+    $Stdev$ & x & x & x & 97 \\
+    \hline
+    $Min$ & 0 & 0 & 0 & 234 \\
+    \hline
+    $Max$ & 89 & 1999 & 249 & 837 \\
+    \hline
+    \end{tabular}
+}
+\caption{Data Characteristics of the Variables in the Customers/Baskets Dataset}
+}
+\hfill
+\parbox{.50\linewidth}{
+\centering
+\scalebox{0.85}
+{
+    \begin{tabular}{| c | c | c | c | c |}
+    \hline
+    & Week & Customer & Product & Discount \\
+    \hline
+    $Mean$ & x & x & x & 25 \\
+    \hline
+    $Stdev$ & x & x & x & 10 \\
+    \hline
+    $Min$ & 0 & 0 & 0 & 10 \\
+    \hline
+    $Max$ & 89 & 1999 & 249 & 40 \\
+    \hline
+    \end{tabular}
+}
+\caption{Data Characteristics of the Variables in the Coupons Dataset}
+}
+\end{table}
+
+We observe that on average, customers spent 5.64 euros on products and got an
+average discount of 25 cents through coupons on qualifying products.
+
+\subsection{Data Preparation}
+The dataset is complete and does not contain any missing observations, or any
+(significant) outliers, therefore we use the dataset as is. Even if we find
+outliers, we will not exclude those observations since they provide valuable
+information. Furthermore, we will use the purchase data from the
+Customers/Baskets dataset to construct one of our features: the past purchase
+frequency. First, this will serve as a baseline/benchmark model (more details in
+Section 4). Second, it will allow us to analyze the relationship between future
+purchase decisions and past purchases.

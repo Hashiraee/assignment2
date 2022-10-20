@@ -1,0 +1,150 @@
+\section{Approach and Baselines}
+In this section, we introduce our selected learning algorithms, present the
+definition of our model in mathematical terms (if possible), and discuss our
+approach and baselines. In addition, we will explain which model we selected to
+construct our predictions. With the predictions we will get using our selected
+model, we will be able to answer our research central question (defined in
+Section 2.1). The models we selected to use for our predictions are both
+supervised learning models, a linear regression model and a random forest model.
+
+For our analysis, we do not plan to use multiple sequential model stages
+(because we did not select models which require that). We
+will also not stack models, but we will use two different supervised learning
+models in order to compare their performance against each other to determine
+which model produces the (significantly) more accurate predictions. Using
+multiple models for the same target variable ($y_{ij,k}$) gives us an idea about
+whether a model gives us more accurate predictions. Moreover, we will apply the
+linear regression and random forest separately, and not stack models (so we
+do not use multiple models to derive our target variable). Note, that
+for our random forest model, all the trees are built independently. Therefore,
+since there is no dependence between trees, all trees can be built in parallel.
+
+The predictions we will make using one of our two selected models will be the
+predictions for the future purchase decisions customers make using past purchase
+frequency and coupon usage. This will help retailers who use personalized
+coupons as a way of personalized advertising understand whether the coupons
+indeed have significant effect on consumer purchasing behavior. And if retailers
+have access to both the coupons they provide and the past purchasing data of the
+consumers, they can target customers more effectively in order to increase brand
+awareness or increase/maximize sales. Past purchase data (or frequency) is a
+decent indicator for customer retention (or brand loyalty) and overall consumer
+behavior.
+
+\subsection{Data Preparation}
+After analyzing our data, we look for missing data and outliers to prepare the
+data for our analysis. The process for data preparation/processing 
+is discussed in the data section (Section 3).
+
+\subsection{Data splits}
+Our data consist of 90 weeks. We use the first 88 weeks for training our models,
+to ensure we have enough data to make our predictions as accurate as possible.
+Next, we use the data of week 89 as our testing dataset. Finally, we will use the
+last week (week 90) as our validation dataset.
+
+\subsection{Model Training}
+We will use the first 88 weeks to train our models to provide sufficient data
+for our models. For the linear regression model, this will yield estimators
+which are as 'accurate' as possible. For our random forest model using the 88
+weeks of data will provide enough data to make the classifications as accurate
+(low bias) as possible. We will evaluate whether our model generalizes well to
+unseen data (to the general population) by using the our 1 week test data (week
+89) and our 1 week validation data (week 90) so 2 weeks in total. If we find
+that the performance metric we use shows us a significant improvement from our
+baseline model, we can conclude that our model generalizes adequately well to
+unseen data (more about the performance metric and baseline model in the
+following subsections).
+
+\subsection{Model Selection}
+
+\subsection{Linear Regression Model}
+First, we use a linear regression. Here, we define our models in terms of our 2
+selected features:
+\begin{equation}
+    y_{ij,k} = \gamma_{0} + \gamma_{1}*past\_purchases_{ij,k} +
+    \gamma_{2}*coupon\_use_{ij,k} + \epsilon_{ij,k}.
+\end{equation}
+Where \textit{past\_purchases}$_{ij,k}$ corresponds to the past purchase
+frequency feature and 
+\textit{coupon\_use}$_{ij,k}$ corresponds to the past coupon usage feature. 
+Our estimator for $\gamma_{0}$ corresponds to the intercept, 
+$\gamma_{1}$ captures the effect of past purchases of customers and 
+$\gamma_{2}$ captures the effect of coupon usage. These estimators can be used
+to construct our predictions and also give an insight to the significance of our
+selected features.
+
+\subsection{Random Forest Model}
+Second, we use a Random Forest model. Since models like the Random Forest Model
+are known as 'Black Box' models, we can not give an explicit mathematical
+definition. However, the probability of a certain customer (i) purchasing a certain
+product (j) for a certain observation (k) is still a function of the past
+purchases and past coupon usage, hence can be generally represented as:
+\begin{equation}
+    y_{ij,k} = f(past\_purchases_{ij,k}, coupon\_use_{ij,k}; \beta).
+\end{equation} Where $\beta$ is a parameter vector corresponding to our 2
+selected features (variables).
+
+A random forest classification model builds on top of decision trees, another way of 
+classifying information based on characteristics. Random forests use bagging (or bootstrap aggregating) 
+to build a series of uncorrelated trees and average them for a better, less variant prediction. 
+The way boosted trees are grown, is dependent on the concept of information gain, 
+as measured by Shannon’s entropy formula:
+\begin{equation}
+    H(X) = \mathbb{E}\left[ I(X) \right] = \mathbb{E}\left[ -log(p(X)) \right].
+\end{equation}
+Here, I(X) is defined as information contained by X and thus the expected information gain 
+is defined as $-log(p(X))$, the probability of X occurring. Using this metric, the nodes of a 
+decision tree nodes are grown until a certain level of information gain is reached.
+
+Using bagging, which selects random samples with replacement, defined as $b =
+\{1, 2, 3, ..., B\}$ a decision tree $T_{b}$ can be grown for each bootstrapped
+sample. The model first randomly selects m number of variables out of a total of
+n variables, picks the best split ratio between the m variables and splits the
+node into two daughter nodes. Repeating this for all b yields an ensemble of
+decision trees $\{T_{b}\}^{B}_{1}$. When it comes to making a prediction for say
+y, $\hat{C}_{b}(y)$, can be defined as a majority vote between the multiplicity of decision
+trees, or:
+\begin{equation}
+    \hat{C}_{random\_forest}^{B}(y) = \text{ majority vote }
+\{\hat{C}_{b}(y)\}.
+\end{equation}
+Reference: (https://www.math.mcgill.ca/yyang/resources/doc/randomforest.pdf). \\
+The assumptions which need to be satisfied for the Random Forest model, are
+stated in Section 2.4.
+
+\subsection{Baseline Model}
+For our baseline model, we use a simple model which only consists of one
+feature. The one feature it does contain is also part of our two selected
+features, namely the past purchase frequency
+($past\_purchase\_frequency_{ij,k}$). That serves as a decent baseline and does
+have a adequate cross entropy loss value.
+
+\subsubsection{Baseline Model: Implementation}
+Our baseline model is constructed by summing up all the purchases of a certain
+product j by a certain customer i and dividing the total sum by the total number
+of weeks. Which gives us a baseline for every customer and product combination.
+
+\subsubsection{Baseline Model: Relevance and Selection}
+Moreover, not only is it a decent baseline, but it is an adequate measure of
+customer purchase behavior. Since a significant amount of consumers tend to
+either stick to a certain product (or certain category), it is by itself a good
+indicator of future customer purchasing decisions. We selected this baseline
+because it not only uses one of our selected features (past purchase frequency),
+but it also has decent predictive power over future purchase decisions by
+itself.
+
+These baselines are not only simple to implement, relevant and decently
+performing but can also be used as a benchmark for prediction performance between
+our models. If past purchase data itself is not available to retailers, it makes
+personalized advertising significantly harder because retailers have less
+information to make relevant coupons (or interesting coupons) for consumers.
+Also, the insight we can gain by comparing our baseline with our models is
+relevant. Since no improvement (or an insignificant improvement) against the
+baseline model implies that our model is not that useful.
+
+\subsection{Performance Monitoring}
+We monitor (or check) the performance by using (binary) cross entropy loss. The
+perfect prediction(s) have a loss of 0, a lower value indicates significant
+better performance in terms of (prediction) accuracy of a chosen model.
+
+\subsection{Findings / Insights}
+We will present our findings and insights in the next section (Results Section).

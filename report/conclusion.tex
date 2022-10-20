@@ -1,0 +1,47 @@
+\section{Conclusion}
+Retailers use personalized advertisement by using coupons to try to increase
+purchases, increase brand awareness or enter a new segment of a market. A
+insight into the future purchases of consumers gives retailers an edge in
+maximizing their profits by (for example) increasing sales. Accurate predictions
+into future consumer purchases are therefore a convenient way for retailers to
+determine the effects of both past purchasing habits and personalized
+advertising through coupons. In order to find predictions which are as accurate
+as possible, we compare a baseline model (with only past purchase frequency as
+feature) against a linear regression model which uses past purchasing
+data/frequency (with multiple time horizons such as monthly, weekly, quarterly
+etc.).
+
+In this research, we therefore formulate an answer to our original research
+question: \textit{Can (past) coupon usage and past purchasing frequency predict
+future purchase decisions?}
+
+To answer the research question, we consider our baseline model (with only the
+past purchasing frequency feature), our linear regression model (with past
+purchasing frequency on multiple time horizons) and past coupon usage and our
+random forest model using the same features as the linear regression model
+mentioned before. We find that predictions using the Random Forest model
+significantly outperform the both the baseline model and the linear regression
+model in terms of cross entropy loss. Therefore, the best predictions are
+obtained using the Random Forest model with the past purchasing frequency (on
+multiple time horizons) and with past coupon use. The before mentioned implies
+that indeed the past purchasing frequency and coupon use are significantly
+import features into predicting the future purchase predictions of consumers.
+
+Finding the significance of both using our Random Forest model, but more
+importantly the past purchasing frequency and coupon use, gives potential
+retailers an advantage for personalized advertising to consumers and also
+obtaining/collecting purchase data in order to optimally target customers for
+certain product (or categories). For retailers having access to both sales data
+and coupon usage data, the predictions of future purchases will be significantly
+more accurate than only having past coupon usage data. Therefore, retailers
+should either try to obtain past purchasing data or try to use their own platform for sales
+to be able to collect and analyze such data.
+
+For future research, one may consider adding more data features (of customers)
+to be able more effectively target certain customers. Having additional data on
+consumers may result in more effective targeting. For example, the gender or age
+may also provide valuable information on future purchasing decisions (purchasing
+habits across different product categories). Moreover,
+we can also consider stacking models (combining regression with random forest by
+applying them sequentially) may result in even more accurate predictions than
+only using one model by itself.
