@@ -59,16 +59,25 @@ following subsections).
 \subsection{Linear Regression Model}
 First, we use a linear regression. Here, we define our models in terms of our 2
 selected features:
-\begin{equation}
-    y_{ij,k} = \gamma_{0} + \gamma_{1}*past\_purchases_{ij,k} +
-    \gamma_{2}*coupon\_use_{ij,k} + \epsilon_{ij,k}.
-\end{equation}
-Where \textit{past\_purchases}$_{ij,k}$ corresponds to the past purchase
-frequency feature and 
-\textit{coupon\_use}$_{ij,k}$ corresponds to the past coupon usage feature. 
+\begin{multline}
+y_{ij,k} = \gamma_{0} + \gamma_{1}*past\_purchases_{ij,k}^{full}
++ \gamma_{2}*past\_purchases_{ij,k}^{30\_weeks}
++ \gamma_{3}*past\_purchases_{ij,k}^{4\_weeks} \\
++ \gamma_{4}*past\_purchases_{ij,k}^{12\_weeks}
++ \gamma_{5}*coupon\_use_{ij,k} + \epsilon_{ij,k}.
+\end{multline}
+Where \textit{past\_purchases}$_{ij,k}^{t}$ corresponds to the past purchase
+frequency feature for a period of t weeks where $t = \{full, 30\_weeks,
+4\_weeks, 12\_weeks\}$ corresponding to the all the weeks, 30 weeks, 4 weeks (a
+month) and 12 weeks (a quarter) respectively.
+And where \textit{coupon\_use}$_{ij,k}$ corresponds to the past coupon usage feature.
+
 Our estimator for $\gamma_{0}$ corresponds to the intercept, 
-$\gamma_{1}$ captures the effect of past purchases of customers and 
-$\gamma_{2}$ captures the effect of coupon usage. These estimators can be used
+$\gamma_{1}, \gamma_{2}, \gamma_{3}$ and $\gamma_{4}$ capture the effects of past 
+purchases of customers for respectively all the weeks, 30 weeks, 4 weeks (a
+month) and 12 weeks (a quarter) and $\gamma_{5}$ captures the effect of (past) coupon usage.
+
+These estimators can be used
 to construct our predictions and also give an insight to the significance of our
 selected features.
 
@@ -79,9 +88,13 @@ definition. However, the probability of a certain customer (i) purchasing a cert
 product (j) for a certain observation (k) is still a function of the past
 purchases and past coupon usage, hence can be generally represented as:
 \begin{equation}
-    y_{ij,k} = f(past\_purchases_{ij,k}, coupon\_use_{ij,k}; \beta).
-\end{equation} Where $\beta$ is a parameter vector corresponding to our 2
-selected features (variables).
+    y_{ij,k} = f(\sum_{m \in t} past\_purchases_{ij,k}^{m}, coupon\_use_{ij,k}; \beta).
+\end{equation} Where $\beta$ is a parameter vector corresponding to our 
+selected features (variables) and \\
+$t = \{full, 30\_weeks,
+4\_weeks, 12\_weeks\}$ corresponding to the all the weeks, 30 weeks, 4 weeks (a
+month) and 12 weeks (a quarter) respectively.
+
 
 A random forest classification model builds on top of decision trees, another way of 
 classifying information based on characteristics. Random forests use bagging (or bootstrap aggregating) 

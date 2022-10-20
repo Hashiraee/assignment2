@@ -23,8 +23,10 @@ baskets = pd.read_parquet(f"{DATA_PATH}/baskets-s.parquet")
 coupons = pd.read_parquet(f"{DATA_PATH}/coupons-s.parquet")
 prediction_index = pd.read_parquet(f"{DATA_PATH}/prediction_index.parquet")
 
-print("Customer/Baskets dataset:")
+print(prediction_index.head(20))
+print(prediction_index.tail(20))
 
+print("Customer/Baskets dataset:")
 print(baskets.head())
 
 # The first week

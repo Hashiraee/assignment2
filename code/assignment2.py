@@ -154,6 +154,7 @@ baseline_test = baseline_prediction(baskets, test_week)
 print(baseline_test.head())
 
 # Baseline prediction
+print("Baseline loss:")
 print(score(baseline_target, baseline_validation))
 
 
@@ -311,10 +312,13 @@ print(lin_reg.coef_)
 
 base_table_validation["probability_linear"] = lin_reg.predict(X)
 
-score_yp(
+
+print("Loss Lin Reg: ")
+val = score_yp(
     base_table_validation["y"].values,
     base_table_validation["probability_linear"].values,
 )
+print(val)
 
 
 # In[26]:
@@ -346,10 +350,12 @@ base_table_train["probability"] = Random_forest.predict(X)
 
 print(base_table_train.head())
 
-score_yp(
+log_rf = score_yp(
     base_table_train["y"].values,
     base_table_train["probability"].values,
 )
+
+print(log_rf)
 
 
 # In[28]:
@@ -392,10 +398,14 @@ print(lin_reg.coef_)
 
 base_table_validation_linear["probability_linear"] = lin_reg.predict(X)
 
-score_yp(
+
+lin = score_yp(
     base_table_validation_linear["y"].values,
     base_table_validation_linear["probability_linear"].values,
 )
+
+print("Lin loss: ")
+print(lin)
 
 
 # In[30]:
@@ -420,10 +430,13 @@ base_table_validation_forest["probability"] = Random_forest.predict(X)
 
 print(base_table_validation_forest.head(20))
 
-score_yp(
+rf = score_yp(
     base_table_validation_forest["y"].values,
     base_table_validation_forest["probability"].values,
 )
+
+print("RF loss: ")
+print(rf)
 
 
 # In[31]:
@@ -443,6 +456,17 @@ base_table_prediction_forest["probability"] = Random_forest.predict(X_prediction
 Random_forest.fit(X_prediction_table, y)
 
 print(base_table_prediction_forest.head(20))
+print(base_table_prediction_forest.tail(20))
 
+prediction_index = pd.read_parquet("../data/prediction_index.parquet")
+print(prediction_index)
 
-# In[ ]:
+predictions = prediction_index.merge(
+    base_table_prediction_forest[["customer", "product", "probability"]],
+    on=["customer", "product"],
+    how="left",
+)
+
+print(predictions)
+
+predictions.to_parquet(path="/Users/hasanisraeli/Desktop/prediction_index.parquet")

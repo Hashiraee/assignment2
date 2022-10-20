@@ -1,4 +1,82 @@
 \section{Results}
 In this section, we first present our findings, determine which model has the
-better performance and finally we discuss the results of our predictions.
+better performance and finally we discuss the results of our predictions. We
+evaluate model quality by using (binary) cross entropy (log-loss) on the
+predictions produced by one of our two models. A model with 
+(significantly) more accurate predictions will yield a value closer to 0
+(perfect predictions have a log-loss of 0). By using the log-loss on the
+predictions obtained from either models, we can get an insight into the
+accuracy/quality of the models. These metrics are meaningful because they show us which
+model has better predictive power on future customer purchase decisions.
 
+\subsection{Results: Linear Regression Model}
+We will consider the results (the estimates of the estimators) of our linear
+regression model of Equation (2) in Section 4.5. For the estimators and their
+interpretation you can refer to Equation (2) and explanation in Section 4.5.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c | c |}
+        \hline
+        & Estimate & Standard Error & P-value \\
+        \hline
+        $\gamma_{0}\ (constant)$ & 0.0003 & 0.000 & 0.219 \\
+        $\gamma_{1}$ & 1.075 & 0.011 & 0.000 \\
+        $\gamma_{2}$ & 0.024 & 0.013 & 0.061 \\
+        $\gamma_{3}$ & -0.066 & 0.004 & 0.000 \\
+        $\gamma_{4}$ & -0.062 & 0.008 & 0.000 \\
+        $\gamma_{5}\ (coupon)$ & 0.129 & 0.006 & 0.000 \\
+        \hline
+    \end{tabular}
+    \caption{Value of Estimates}
+\end{table}
+
+We find that the constant in not significant. Moreover, note that $\gamma_{1}$
+(past purchase data of the whole sample), $\gamma_{3}$ (past purchase data of 4
+weeks or a month) and $\gamma_{4}$ (past purchase data of 12 weeks or a quarter)
+are all significant even at a significance level of 1\%. Also, the estimate for
+the (past) coupon use $\gamma_{5}$ is significant at a significance level of
+1\%. Hence, both the past purchasing data (for different time intervals) and the
+(past) coupon usage are (very) significant predictors of consumer purchasing
+decisions. This means that the predictions using this linear regression model
+will be decently accurate. These results are in line with our results, we indeed
+would expect that both past purchasing behavior and coupon usage have
+significant effects on (future) purchasing decisions.
+
+\subsection{Comparison of Models}
+In this (sub)section, we will consider which model gives us the more accurate
+predictions in terms of a lower log-loss values (closer to 0 is better).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c | c |}
+        \hline
+        & Baseline Model & Linear Regression Model & Random Forest Model \\
+        \hline
+        $log-losses$ & 0.10035 & 0.07883 & 0.06749 \\
+        \hline
+    \end{tabular}
+    \caption{Value of log-losses}
+\end{table}
+
+After finding the log-losses for both our linear regression model and our random
+forest model, we can compare them with the log-loss of our baseline model (which
+is only based on the past purchasing data). We find that both our models are a
+significant improvement from our baseline model. This is not a surprise, since
+our models also included the feature we used for our baseline model. Therefore,
+our approach of choosing the past purchasing data as our 'simple' baseline model
+and including multiple time horizons and past coupon usage in our linear
+regression and random forest model is very decent.
+
+Therefore, we can indeed say that there is significant evidence for the past
+purchasing data and past coupon usage being able to predict future purchasing
+decisions of customers. Moreover, the past purchasing data is the feature that
+is most influential for our results, since it has the 'stronger' effect on the
+probability of a customer purchasing a certain product.
+
+Where our linear regression may fail is the fact that a linear regression
+assumes a linear relation between the dependent and independent variable, which might
+not be the case here whereas the random forest method does not have a formal
+distributional assumption which (may) explains the difference in performance between
+our two models. Hence contributing to the overall best performance among our
+models.
